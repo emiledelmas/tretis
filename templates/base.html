@@ -1,0 +1,301 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tretis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      {% if user.is_authenticated %}
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+      {% endif %}
+    <link rel="stylesheet" href="{% static 'tretis/nes.css/nes.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'tretis/style.css' %}" />
+  
+    <script src="http://tretis.ddns.net:3000/socket.io/socket.io.js"></script>
+    <!-- p5 Librairies -->
+    <script src="{% static 'tretis/p5.min.js' %}"></script>
+    <script src="{% static 'tretis/p5.dom.js' %}"></script>
+
+    <!-- Game files -->
+    <script src="http://tretis.ddns.net:3000/serverSettings.js"></script>
+      <script src="http://tretis.ddns.net:3000/game/globalVar.js"></script>
+        <script src='http://tretis.ddns.net:3000/game/arrayManager.js' ></script>
+          <script src= 'http://tretis.ddns.net:3000/game/graphic.js' ></script>
+
+
+                              <!-- Subscribe to Pewdipie -->
+
+
+          <script src='http://tretis.ddns.net:3000/game/piecesPattern.js'></script>
+        <script src='http://tretis.ddns.net:3000/game/pieces.js' ></script>
+      <script src='http://tretis.ddns.net:3000/game/preview.js'></script>
+      <script src="http://tretis.ddns.net:3000/game/sketch.js"></script>
+    <script src='http://tretis.ddns.net:3000/game/handleServer.js'></script>
+    
+    
+    {% comment %}
+    <!-- Server file -->
+    <script src="{% static 'tretis/serverSettings.js' %}"></script>
+
+    <!-- Game files -->
+    <script src="{% static 'tretis/game/globalVar.js' %}"></script>
+    <script src="{% static 'tretis/game/arrayManager.js' %}"></script>
+    <script src="{% static 'tretis/game/graphic.js' %}"></script>
+
+    <script src="{% static 'tretis/game/piecesPattern.js' %}"></script>
+    <script src="{% static 'tretis/game/pieces.js' %}"></script>
+    <script src="{% static 'tretis/game/preview.js' %}"></script>
+    <script src="{% static 'tretis/game/sketch.js' %}"></script>
+    <script src="{% static 'tretis/game/handleServer.js' %}"></script>
+    {% endcomment %}
+      {% if user.is_authenticated %}
+      <script src="{% static 'bootstrap/js/jquery-3.5.0.min.js' %}"></script>
+      <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+      {% endif %}
+      {% block head %}
+      {% endblock %}
+    <script>
+      function imReady() {
+        if(!gameStarted && !spectate) socket.emit('imReady');
+      }
+
+       function launch() {
+        if(!gameStarted && !spectate) socket.emit('startGame');
+      }
+      function enteredRoom() {
+        roomHandler();
+        return false;
+      }
+      function joinBattleRoyale() {
+        changeMode("br");
+        roomHandler();
+        return false;
+      }
+      function leaveRoom() {
+        socket.emit('leaveRoom');
+        window.location.reload(true);
+      }
+    </script>
+
+  </head>
+
+  <body>
+    <div class="button-top-right">
+    {% if user.is_authenticated %}
+      <a id="dropdownMenu2" data-toggle="dropdown" class="nav-link dropdown-toggle" aria-expanded="false">
+             <div class="progress mx-auto" data-value='{{ user.profile.score }}' data-toggle="tooltip"  data-placement="right" title="{{ user.profile.score }}/{% xpleveling user.profile.level %} XP" data-type="primary" style="width:75px;height:75px;" >
+
+           
+          <span class="progress-left">
+                        <span class="progress-bar border-warning" ></span>
+          </span>
+          <span class="progress-right">
+                        <span class="progress-bar border-warning"></span>
+          </span>
+          <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            <img src="{{ user.profile.image }}" class="nes-avatar is-rounded is-large" style="width:95%;height:95%;border-radius:150px">
+          </div>
+         
+        </div>
+        <div>
+     
+</div>
+<a href="" class="nes-badge">
+  <span class="is-warning" style="font-size:10px;z-index:1;top:-45px;display: inline-block;width: 30px;height: 10px;left:60px">{{user.profile.level}}</span>
+</a>
+  
+  </a>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="">
+  <h6 class="dropdown-header">{{ user.username }}</h6>
+    <button class="dropdown-item" type="button"  onclick="location.href='/profile'">Profile</button>
+    <button class="dropdown-item" type="button"  onclick="location.href='/history/{{ user.username }}'">History</button>
+      <div class="dropdown-divider"></div>
+    <button class="dropdown-item" type="button"  onclick="location.href='/leaderboard/'">Leaderboard</button>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-item" type="button" onclick="location.href='/logout'">Logout</button>
+  </div>
+    {% else %}
+    <button type="button" onclick="location.href='/login'" class="nes-btn is-primary">Login</button>
+    {% endif %}
+    </div>
+    <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-animate-top w3-card-4">
+      <header class="w3-container w3-brown">
+        <h2>Tretis</h2>
+      </header>
+      <div class="w3-container" style="color: black">
+        <p style="color: grey; font-size: 80%"><i>Press Esc to close the menu...<i></p>
+        <button onclick="leaveGame();" class="w3-button w3-black">Leave game</button>
+        <br><br>
+      </div>
+    </div>
+  </div>
+    <div id="wholePage">
+      <br><br>
+
+
+      <div><p style="text-align:center"><a class="my-logo" href="../">Tretis</a></p></div>
+        <p style="text-align:center"> - {% block title %}{% endblock %} - </p>
+      <br>
+   
+      {% block content %}
+
+      {% endblock %}
+         <div id="message" style="display: none">
+      <span class="close">&times;</span>
+      <p id="messageText"></p>
+    </div>
+     {% if user.is_authenticated %}
+        <div id="death" style="display: none;">
+          <h1><strong id="lostThing">You lost.</strong></h1>
+          <h3 id="scoreS"></h3>
+          <br>
+          <a href="javascript:send_score()" id="scorebtn"><img class="menuButton" src="{% static 'tretis/assets/buttons/menuButton.png' %}"></img></a>
+        </div>
+    </div>
+     <form method="post" id="scoreform" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="username_field" id="username_field" style="display:none">
+    <input type="text" name="score_field" id="score_field" style="display:none">
+    <input type="text" name="rank_field" id="rank_field" style="display:none">
+    </form>
+    <script>
+    const scoreform = document.getElementById("scoreform");
+
+    function send_score(){
+      document.getElementById("username_field").value = pseudo;
+      document.getElementById("score_field").value = score;
+      document.getElementById("rank_field").value = rank;
+      scoreform.submit();
+      console.log("test");
+    }
+    </script>
+
+    {% else %}
+    <div id="death" style="display: none;">
+          <h1><strong id="lostThing">You lost.</strong></h1>
+          <h3 id="scoreS"></h3>
+          <br>
+          <a href="../"><img class="menuButton" src="{% static 'tretis/assets/buttons/menuButton.png' %}"></img></a>
+        </div>
+    </div>
+    {% endif %}
+<script type="text/javascript">
+  let span = document.getElementsByClassName("close")[0];
+  let modal = document.getElementById("message");
+  modal.style.display = "none";
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+  /* When the user clicks on the button,
+  toggle between hiding and showing the dropdown content */
+  function toggleButton() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+
+
+
+</script>
+ {% if user.is_authenticated %}
+ <script>
+ let is_authenticated = true;
+ pseudo = '{{ user.username }}';
+
+let user_pp_url = '{{ user.profile.image }}';
+let level = {{ user.profile.level }};
+ $(function() {
+
+  $(".progress").each(function() {
+
+    let value = $(this).attr('data-value');
+    let left = $(this).find('.progress-left .progress-bar');
+    let right = $(this).find('.progress-right .progress-bar');
+    value = (value / (5 * level * level - 5 * level +50 )) * 100;
+    if (value > 0) {
+      if (value <= 50) {
+        left.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
+      } else {
+        left.css('transform', 'rotate(180deg)')
+        right.css('transform', 'rotate(' + percentageToDegrees(value - 50) + 'deg)')
+      }
+    }
+
+    })
+
+    function percentageToDegrees(percentage) {
+
+      return percentage / 100 * 360
+
+    }
+
+    });
+    
+   $('[data-toggle="tooltip"]').each(function(){
+    var options = { 
+    	html: true 
+    };
+
+    if ($(this)[0].hasAttribute('data-type')) {
+        options['template'] = 
+        	'<div class="tooltip ' + $(this).attr('data-type') + '" role="tooltip">' + 
+        	'	<div class="tooltip-arrow"></div>' + 
+        	'	<div class="tooltip-inner"></div>' + 
+        	'</div>';
+    }
+
+    $(this).tooltip(options);
+});
+ </script>
+ {% else%}
+  <script>
+ let is_authenticated = false;
+pseudo = {% nameGenerator %}
+ </script>
+ {% endif %}
+  {% if messages %}
+      {% for message in messages %}
+    <script>
+    let message = '{{ message }}'
+    let type = '{{ message.tags }}'
+    printMessage(message, type);
+  </script>
+      {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+         <script>
+    let message = '{{ error|escape }}'
+    let type = 'warning'
+    printMessage(message, type);
+  </script>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+         <script>
+    let message = '{{ error|escape }}'
+    let type = 'warning'
+    printMessage(message, type);
+  </script>
+    {% endfor %}
+{% endif %}
+<script>
+
+</script>
+  </body>
+</html>

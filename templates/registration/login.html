@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+{% load static %}
+{% providers_media_js %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style type="text/css">
+    #customBtn {
+      display: inline-block;
+      background: white;
+      color: #212529;
+      width: 350px;
+      border-radius: 5px;
+      border: thin solid #888;
+      box-shadow: 1px 1px 1px grey;
+      white-space: nowrap;
+    }
+    #customBtn:hover {
+      cursor: pointer;
+    }
+    span.label {
+      font-family: inherit;
+      font-weight: normal;
+    }
+    span.icon {
+      background: url('/static/g-normal.png') transparent 5px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 42px;
+      height: 42px;
+    }
+    span.buttonText {
+      display: inline-block;
+      vertical-align: top;
+      margin-top:20px;
+      padding-right: 42px;
+      font-size: 14px;
+      font-weight: bold;
+      /* Use the Roboto font that is loaded in the <head> */
+      font-family: inherit;
+    }
+  </style>
+  
+
+   <div class="nes-container is-dark with-title" style="margin: auto;">
+  <p class="title">Log in manually</p>
+<form method="post" class="form-group">
+{% csrf_token %}
+    <div class="nes-field">
+    <input id="id_username" type="text" class="pseudo" placeholder="Pseudo" pattern=".{1,150}" autocomplete="username" required="" title="150 lettres max." name="username">
+    </div>
+    <br>
+    <input id="id_password" class="pseudo" type="password" placeholder="Password"  pattern=".{1,150}"required="" title="150 lettres max." name="password" autocomplete="current-password">
+    <br><br>
+    <button class="nes-btn" type="submit">Login</button><br><br>
+  </div> </form><br><br>
+  <span class="nes-text is-warning">Dont have an account? <br>Create one <a href="/register">here</a></span><br><br>
+       
+        <div class="nes-container is-dark with-title" style="margin: auto;">
+          <p class="title">Sign in with medias</p>
+              <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "google" %}'" style="padding:10px"> 
+            <div id="customBtn" class="customGPlusSignIn" >
+              <i class="nes-icon google is-medium"></i>
+              <span class="buttonText">Sign in with Google</span>
+            </div>
+          </div>
+          <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "twitter" %}'" style="padding:10px">
+            <div id="customBtn" class="customGPlusSignIn" >
+              <i class="nes-icon twitter is-medium"></i>
+              <span class="buttonText" style="margin-top:17px">Sign in with Twitter</span>
+            </div>
+          </div>
+          <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "discord" %}'" style="padding:10px">
+            <div id="customBtn" class="customGPlusSignIn" >
+              <img class="nes-icon discord is-medium" src="{% static 'tretis/login/discord.png' %}" style="transform:scale(3.2);" ></img>
+              <span class="buttonText" style="margin-top:15px">Sign in with Discord</span>
+            </div>
+          </div>
+          <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "twitch" %}'" style="padding:10px">
+            <div id="customBtn" class="customGPlusSignIn" >
+              <i class="nes-icon twitch is-medium"></i>
+              <span class="buttonText" style="margin-top:17px">Sign in with Twitch</span>
+            </div>
+          </div>
+          <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "github" %}'" style="padding:10px">
+            <div id="customBtn" class="customGPlusSignIn" >
+              <i class="nes-icon github is-medium"></i>
+              <span class="buttonText" style="margin-top:17px">Sign in with Github</span>
+            </div>
+          </div>
+        </div><br><br>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Global LeaderBoard{% endblock %}
+{% block content %}
+<br>
+<h3>{{ players_count }} player{{ players_count|pluralize }}</h3><br>
+
+<div>
+    <table align="center" style="width: 40%;">
+        <tr>
+            <th colspan="3"><i class="nes-icon trophy"></i><br> Leaderboard</th>
+        </tr>
+        <tr>
+            <th>Level</th>
+            <th>XP</th>
+            <th>Pseudo</th>
+        </tr>
+        {% for player in players %}
+        <tr>
+            <td>{{ player.level }}</td>
+            <td>{{ player.score }}</td>
+            <td><a href="/history/{{ player.user.username }}">{{ player.user.username }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}

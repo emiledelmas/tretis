@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}History{% endblock %}
+{% block content %}
+<br><h3>{{ game_count }} game{{ game_count|pluralize }} played</h3><br>
+{% for game in historique %}
+<div class="nes-container is-dark with-title" style="margin: auto;">
+    <p class="title">{{ game.created|date:"Y-M-d G:i:s" }}</p>
+    <div style="display:flex">
+    <img src="{{ profile.image }}" class="nes-avatar is-rounded is-large" style="width:100px;height:100px;border-radius:150px;display:list-item">
+      <div class="nes-table-responsive">
+        <table class="nes-table is-bordered is-dark" style="margin-left: 40px;pointer-events: none;">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Game Score</th>
+              <th>Total Score</th>
+              <th>Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>#{{ game.rank }}</td>
+                <td>{{ game.game_score }}</td>
+                <td>{{ game.score }}</td>
+                <td>{{ game.level }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+</div>
+    </div><br>
+{% endfor %}
+
+{% endblock %}

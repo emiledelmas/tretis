@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+<div id="homeMenu">
+    <a href="/br">
+    <img class="menuButton" src="{% static 'tretis/assets/buttons/battle-royale.png' %}"></img></a><br><br>
+    <a href="/pr">
+    <img class="menuButton" src="{% static 'tretis/assets/buttons/private-session.png' %}"></img></a><br><br>
+    <a href="javascript:onclick=offline = true; startGame();">
+    <img class="menuButton" src="{% static 'tretis/assets/buttons/play-solo.png' %}"></img></a><br><br>
+  </div>
+{% endblock %}
