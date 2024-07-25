@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Battle Royale{% endblock %}
+{% block content %}
+<div id="brr">
+  <div id="homeform">
+    <form onsubmit="return joinBattleRoyale()">
+    {% if user.is_authenticated %}
+         {% else %}
+        <input id="pseudo" class="pseudo" type="text" placeholder="Pseudo" pattern=".{1,10}" required title="10 lettres max." name="Pseudo">
+        <br>
+        {% endif %}
+        <button class="nes-btn" type="submit">Join</button><br><br>
+    </form>
+  </div>
+  <div id="bottomTables" class="bottomTables">
+  </div>
+    <div id='room' style="display: block;">
+      <br><br>
+    </div>
+{% endblock %}

@@ -1,0 +1,9 @@
+=============================
+UPDATE HISTORY
+=============================
+
+Countries
+---------
+
+* 2013-12-19 (0001): Updated list using https://www.iso.org/obp/ui/#search, Changed name for 6 new countries manually
+* 2007-08-20: Initial import (done before I took over)

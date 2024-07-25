@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% load static %}
+{% providers_media_js %}
+{% block title %} Register {% endblock %}
+{% block content %}
+<style type="text/css">
+    #customBtn {
+      display: inline-block;
+      background: white;
+      color: #212529;
+      width: 350px;
+      border-radius: 5px;
+      border: thin solid #888;
+      box-shadow: 1px 1px 1px grey;
+      white-space: nowrap;
+    }
+    #customBtn:hover {
+      cursor: pointer;
+    }
+    span.label {
+      font-family: inherit;
+      font-weight: normal;
+    }
+    span.icon {
+      background: url('/static/g-normal.png') transparent 5px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 42px;
+      height: 42px;
+    }
+    span.buttonText {
+      display: inline-block;
+      vertical-align: top;
+      margin-top:20px;
+      padding-right: 42px;
+      font-size: 14px;
+      font-weight: bold;
+      /* Use the Roboto font that is loaded in the <head> */
+      font-family: inherit;
+    }
+  </style>
+    <div class="nes-container is-dark with-title" style="margin: auto;">
+  <p class="title">Sign in manually</p>
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+     
+  <div class="nes-field hover" style="display:block">
+            <span id="hoverMode" class="hoverText" style="transform : translateX(-250px) translateY(-22px)">{{ form.username.help_text }}</span>
+    <input type="text" name="username" placeholder="Pseudo" maxlength="150" autofocus="" class="log-field" required=""id="id_username" value="{% if form.username.value %}{{ form.username.value }}{% endif %}"> 
+  
+        </div>
+        <div class="nes-field hover" style="display:block">
+          <span id="hoverMode" class="hoverText" style="transform : translateX(-250px) translateY(-22px)">{{ form.email.help_text }}</span>
+  <input type="email" name="email" placeholder="Email" maxlength="150" autofocus="" class="log-field" required=""id="id_email" value="{% if form.email.value %}{{ form.email.value }}{% endif %}"> 
+
+      </div>
+    <div class="nes-field hover" style="display:block"> 
+    <span id="hoverMode" class="hoverText" style="transform : translateX(-250px) translateY(15px)">{{ form.password1.label }}</span>
+    <input type="password" name="password1" placeholder="Password" autocomplete="new-password" class="log-field" required="" id="id_password1">
+    <div id="hoverMode"  class="my-notify-info hoverText" style="width:50%; transform : translateX(250px) translateY(0px)">
+      <p id="messagText">{{form.password1.help_text}}</p></div>
+  </div>
+  <span style="font-size:14px"></span>
+    <div class="nes-field hover" style="display:block"> 
+    <span id="hoverMode" class="hoverText" style="transform : translateX(-250px) translateY(-22px)">{{ form.password2.help_text }}</span>
+    <input type="password" name="password2" placeholder="Password (again)" autocomplete="new-password" class="log-field" required="" id="id_password2"> 
+    </div>
+
+  <button class="nes-btn" type="submit">Register</button></div>   <br><br>
+
+  <div class="nes-container is-dark with-title" style="margin: auto;">
+    <p class="title">Sign in with medias</p>
+        <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "google" %}'" style="padding:10px"> 
+      <div id="customBtn" class="customGPlusSignIn" >
+        <i class="nes-icon google is-medium"></i>
+        <span class="buttonText">Sign in with Google</span>
+      </div>
+    </div>
+    <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "twitter" %}'" style="padding:10px">
+      <div id="customBtn" class="customGPlusSignIn" >
+        <i class="nes-icon twitter is-medium"></i>
+        <span class="buttonText" style="margin-top:17px">Sign in with Twitter</span>
+      </div>
+    </div>
+    <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "discord" %}'" style="padding:10px">
+      <div id="customBtn" class="customGPlusSignIn" >
+        <img class="nes-icon discord is-medium" src="{% static 'tretis/login/discord.png' %}" style="transform:scale(3.2);" ></img>
+        <span class="buttonText" style="margin-top:15px">Sign in with Discord</span>
+      </div>
+    </div>
+    <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "twitch" %}'" style="padding:10px">
+      <div id="customBtn" class="customGPlusSignIn" >
+        <i class="nes-icon twitch is-medium"></i>
+        <span class="buttonText" style="margin-top:17px">Sign in with Twitch</span>
+      </div>
+    </div>
+    <div id="gSignInWrapper" onclick="location.href='{% provider_login_url "github" %}'" style="padding:10px">
+      <div id="customBtn" class="customGPlusSignIn" >
+        <i class="nes-icon github is-medium"></i>
+        <span class="buttonText" style="margin-top:17px">Sign in with Github</span>
+      </div>
+    </div>
+  </div><br><br>
+ 
+
+     </form>
+     </div>
+  </body>
+</html>
+{% endblock %}

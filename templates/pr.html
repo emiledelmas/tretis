@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Private Rooms{% endblock %}
+
+{% block content %}
+<div id="brr" onload="changeMode('basic');">
+    <div id="homeform">
+      <div class="dropdown">
+        <button onclick="toggleButton()" class="nes-btn is-primary dropbtn">Change Mode</button>
+        <div id="myDropdown" class="dropdown-content">
+          <a onclick="changeMode('basic')">Basic</a>
+          <a onclick="changeMode('chill')">Netflix 'nd chill</a>
+          <a onclick="changeMode('boom')">Boom !</a>
+          <a onclick="changeMode('modified')">Modified</a>
+        </div>
+      </div>
+      <br><br>
+      <div style="display: inline;">
+        <p style="display:inline">Gamemode : </p>
+        <div class="hover">
+          <p style="display:inline" class="nes-text is-primary" id="modeP"><p>
+          <span id="hoverMode" class="hoverText"></span>
+        </div>
+      </div>
+        <form onsubmit="return enteredRoom()">
+         {% if user.is_authenticated %}
+         {% else %}
+          <div class="nes-field">
+            <input id="pseudo" type="text" id="name_field" class="pseudo" placeholder="Pseudo" pattern=".{1,10}" required="" title="10 lettres max." name="Pseudo">
+          </div>
+            <br>
+         {% endif %}
+            <input id="roomChoice" class="pseudo" type="text" placeholder="Room" pattern=".{1,4}" required title="1-4 characters" name="Room">
+            <br><br>
+            <button class="nes-btn" type="submit">Join / Create</button><br><br>
+        </form>
+        <div id="bottomTables" class="bottomTables"></div>
+      </div>
+        <div id='room' style="display: none;">
+          <button class="nes-btn is-error" onclick="leaveRoom()">Leave room</button>
+          <button class="nes-btn" onclick="imReady()">Set ready</button>
+          <button class="nes-btn is-disabled" id="launchgamebtn" onclick="launch()">Start Game</button>
+          <br><br>
+        </div>
+      </div>
+      <script type="text/javascript">
+        changeMode('basic');
+      </script>
+{% endblock %}

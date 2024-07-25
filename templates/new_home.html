@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+<div class="button-top-right" style="margin-right: 120px;margin-top: 15px;">
+    <div class="nes-field">
+        <!--span style="color:grey">Guest-2236</span-->
+    </div>
+</div>
+<div class="nes-container is-dark with-title" style="margin: auto;">
+    <p class="title">Play in Battle Royale</p>
+<div id="brr">
+    <div id="homeform">
+      <form onsubmit="return joinBattleRoyale()">
+      {% if user.is_authenticated %}
+           {% else %}
+          <input id="pseudo" class="pseudo" type="text" placeholder="Pseudo" pattern=".{1,10}" required title="10 lettres max." name="Pseudo" style="width:80%;display:none">
+          <br>
+          {% endif %}
+          <button class="nes-btn" type="submit"     >Play</button><br><br>
+      </form>
+    </div>
+    </div>
+</div><br><br>
+<div style="display:flex">
+<div class="nes-container is-dark with-title" style="margin-left:25%;width: 100%;">
+    <p class="title">Create a new room</p>
+<div id="brr" onload="changeMode('basic');">
+    <div id="homeform">
+      
+      <div style="display: inline;">
+        <!--p style="display:inline">Gamemode : </p-->
+        
+        <div class="hover">
+          <!--p style="display:inline" class="nes-text is-primary" id="modeP"><p-->
+          <!--span id="hoverMode" class="hoverText"></span-->
+          <label for="exampleFormControlSelect2">Gamemode</label>
+    <select multiple class="form-control" id="exampleFormControlSelect2" style="width: 500px;">
+      <option>Basic</option>
+      <option>Netflix 'nd chill</option>
+      <option>Boom !</option>
+      <option>Modified</option>
+    </select>
+
+    
+  </div>
+        </div>
+            <!--div >
+              <a onclick="changeMode('basic')"></a>
+            </div>
+            <div>
+              <a onclick="changeMode('chill')">Netflix 'nd chill</a>
+            </div>
+            <div >
+              <a onclick="changeMode('boom')">Boom !</a>
+            </div>
+            <div >
+              <a onclick="changeMode('modified')">Modified</a>
+            </div>
+      </div-->
+        <form onsubmit="return enteredRoom()">
+         {% if user.is_authenticated %}
+         {% else %}
+          <div class="nes-field">
+            <input id="pseudo" type="text" id="name_field" class="pseudo" placeholder="Pseudo" pattern=".{1,10}" required="" title="10 lettres max." name="Pseudo" style="width:90%;display:none" value="Guest-2236">
+          </div>
+         {% endif %}
+            <input id="roomChoice" class="pseudo" type="text" placeholder="Room" pattern=".{1,4}" required title="1-4 characters" name="Room" style="width:92%">
+            <div>
+            <button class="nes-btn" type="submit">Create</button></div>
+        </form>
+    </div>
+</div>
+</div>
+<div class="nes-container is-dark with-title" style="margin-right:25%;height: 170px;">
+    <p class="title">Join a room</p>
+<div id="brr" onload="changeMode('basic');">
+    <div id="homeform">
+      
+  
+        <form onsubmit="return enteredRoom()">
+         {% if user.is_authenticated %}
+         {% else %}
+          <div class="nes-field">
+            <input id="pseudo" type="text" id="name_field" class="pseudo" placeholder="Pseudo" pattern=".{1,10}" required="" title="10 lettres max." name="Pseudo" style="width:90%;display:none">
+          </div>
+         {% endif %}
+            <input id="roomChoice" class="pseudo" type="text" placeholder="Room" pattern=".{1,4}" required title="1-4 characters" name="Room"style="width:90%">
+            <div>
+            <button class="nes-btn" type="submit" style="">Join</button></div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+        <div id="bottomTables" class="bottomTables"></div>
+      </div>
+        <div id='room' style="display: none;">
+          <button class="nes-btn is-error" onclick="leaveRoom()">Leave room</button>
+          <button class="nes-btn" onclick="imReady()">Set ready</button>
+          <button class="nes-btn is-disabled" id="launchgamebtn" onclick="launch()">Start Game</button>
+          <br><br>
+        </div>
+      </div>
+      <script type="text/javascript">
+        changeMode('basic');
+      </script>
+</div>
+
+
+
+
+
+
+    <div id="bottomTables" class="bottomTables">
+    </div>
+      <div id='room' style="display: block;">
+        <br><br>
+      </div>
+
+{% endblock %}

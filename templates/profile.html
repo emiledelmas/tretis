@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% block content %}
+<div class="nes-container is-dark with-title" style="margin: auto;">
+<p class="title">Profile Info</p>
+              <br>
+        <div class="media-body">
+              <div class="progress mx-auto" data-value='{{ user.profile.score }}' data-toggle="tooltip"  data-placement="right" title="{{ user.profile.score }}/{% xpleveling user.profile.level %} XP" data-type="primary" >
+
+           
+          <span class="progress-left">
+                        <span class="progress-bar border-warning" ></span>
+          </span>
+          <span class="progress-right">
+                        <span class="progress-bar border-warning"></span>
+          </span>
+          <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            <img src="{{ user.profile.image }}" class="nes-avatar is-rounded is-large" style="width:95%;height:95%;border-radius:150px">
+          </div>
+         
+        </div>
+        <div>
+         <a href="" class="nes-badge">
+  <span class="is-warning" style="position:relative;z-index:1;top:-20px;display: inline-block;width: 40px;height: 20px;">{{user.profile.level}}</span>
+</a>
+</div>
+         <div class="flex-container" id="usernameDisplay">
+          <h2 class="account-heading flex-item">{{ user.username }}</h2>
+          <a href="javascript:uploadProfile()" class="flex-item" style="font-size:25px;color:grey" id="pencil"><i class="fa fa-pencil"></i></a>
+          
+          </div>
+           <p class="text-secondary" id="email">{{ user.email }}</p>  
+           
+           <!--progress class="nes-progress is-primary" value="{{ user.profile.score }}" max="100" style="width:50%;height:24px;"></progress-->
+
+       
+        </div>
+         
+        
+    
+
+        <form method="POST" enctype="multipart/form-data" id="updateform">
+        {% csrf_token %}
+         <input type="text" name="image" maxlength="155" class="textinput textInput form-control" required="" id="id_image" style="display:none" value="{{ user.profile.image }}">
+                  <div style="display:none;margin-top:20px" id="div_id_username" class="form-group"> <label for="id_username" class=" requiredField">
+                Username </label> <div class=""> <input type="text" name="username" pattern=".{1,10}" title="10 letters max"value="{{ user.username }}" maxlength="150" class="textinput textInput form-control" style="width:40%;margin:auto"required="" id="id_username">  </div> </div>
+          
+          
+            <div class="form-group">
+                <button class="btn btn-outline-info" id="uploadbtn" style="display:none;margin-top:20px" type="submit">Update</button>
+            </div>
+        </form>
+    </div><br><br>
+    <div class="nes-container is-dark with-title" style="margin: auto;">
+<p class="title">PP available</p>
+    <div class="container">
+                 <div class="row">
+                   {% for picture in profile_pics %}
+                  <div class="col-4 col-sm-2" >
+                  {% if user.profile.level < picture.required_level %}
+                   <div class="custom-control custom-radio image-checkbox" data-toggle="tooltip"  data-placement="top" title="Level {{picture.required_level}} is required" data-type="primary" >
+                  
+                   <input type="radio" class="custom-control-input " id="ck2{{ forloop.counter }}" name="checkit" disabled >
+                <label for="ck2{{ forloop.counter }}" class="labelised">
+                  <img src="{{ picture.image.url }}"  class="nes-avatar is-rounded is-large is-locked" style="margin-top:8px">
+                  <div class="lock"></div>
+                   <h6 class="requiredlevel">{{ picture.required_level  }}</h6>
+                </label>
+                  {% else %}
+                   <div class="custom-control custom-radio image-checkbox" >
+                   <input type="radio" class="custom-control-input" id="ck2{{ forloop.counter }}" name="checkit" onchange="update('{{ picture.image.url }}')"{% if picture.image.url == user.profile.image %}checked{% endif %}>
+                <label for="ck2{{ forloop.counter }}" class="labelised">
+                  <img src="{{ picture.image.url }}"  class="nes-avatar is-rounded is-large" style="margin-top:8px">
+                 
+                </label>
+                {% endif %}
+
+                </div>
+                </div>
+                {% endfor %}
+              
+              </div>
+              </div><br>
+               <button class="btn btn-outline-info" id="savebtn" style="display:none">Save</button>
+              </div>
+    <script>
+    function update(zqcdbz){
+        const savebtn = document.getElementById("savebtn");
+        document.getElementById("id_image").value = zqcdbz;
+        savebtn.style.display = ""
+    }
+    const form = document.getElementById("updateform");
+
+    document.getElementById("savebtn").addEventListener("click", function () {
+      form.submit();
+    });
+
+    
+    function uploadProfile(){
+       const uploadbtn = document.getElementById("uploadbtn");
+        const usernamefield = document.getElementById("div_id_username");
+        const displayInfo = document.getElementById("usernameDisplay");
+      const email = document.getElementById("email");
+
+        uploadbtn.style.display  = "";
+        displayInfo.style.display  = "none";
+        usernamefield.style.display  = "";
+        email.style.display  = "none";
+    }
+    $('[data-toggle="tooltip"]').tooltip()
+    </script>
+ 
+{% endblock content %}
